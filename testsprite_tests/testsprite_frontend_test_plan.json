@@ -1,0 +1,2212 @@
+[
+  {
+    "id": "TC001",
+    "title": "Log in and reach the authenticated dashboard",
+    "description": "An unauthenticated visitor can sign in and land on the dashboard with authenticated summary data visible.",
+    "category": "login/session bootstrap",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify dashboard summary data is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Register a new sale from the point of sale",
+    "description": "Verifies that a seller can search products, build a cart, complete checkout, and land on the new sale detail page.",
+    "category": "Point of Sale Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the new sale page"
+      },
+      {
+        "type": "action",
+        "description": "Search for an active product"
+      },
+      {
+        "type": "action",
+        "description": "Add the product to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the customer details"
+      },
+      {
+        "type": "action",
+        "description": "Select a payment method"
+      },
+      {
+        "type": "action",
+        "description": "Complete the checkout"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new sale detail page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sale summary reflects the completed purchase"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Visitor is redirected to login and can access the dashboard after signing in",
+    "description": "An unauthenticated visitor who opens the app is sent to sign in, can log in successfully, and then sees authenticated dashboard content.",
+    "category": "Dashboard Overview",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify dashboard metrics are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Create a new sale from active products",
+    "description": "A seller can search active products, build a cart, enter customer and payment details, and complete checkout to reach the sale detail page.",
+    "category": "Point of Sale (New Sale)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /ventas/nueva"
+      },
+      {
+        "type": "action",
+        "description": "Search for an active product by name or SKU"
+      },
+      {
+        "type": "action",
+        "description": "Add a product to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the customer field with a customer name"
+      },
+      {
+        "type": "action",
+        "description": "Select a payment method"
+      },
+      {
+        "type": "action",
+        "description": "Click the checkout action"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sale detail page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the completed sale summary is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Seller completes a new sale and lands on the sale detail page",
+    "description": "A seller can build a cart, complete checkout, and see the newly created sale detail view.",
+    "category": "Point of Sale Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /ventas/nueva"
+      },
+      {
+        "type": "action",
+        "description": "Search for an active product"
+      },
+      {
+        "type": "action",
+        "description": "Add the product to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the customer field with a customer name"
+      },
+      {
+        "type": "action",
+        "description": "Select a payment method"
+      },
+      {
+        "type": "action",
+        "description": "Complete the checkout"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sale detail page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sale summary is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Unauthenticated visitor is redirected to login",
+    "description": "A visitor without a session is blocked from panel access and sent to the login screen.",
+    "category": "Role Based Permissions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login screen is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Redirect unauthenticated visitors away from protected pages",
+    "description": "Verifies that visiting a protected panel route without a session sends the visitor to the login page with the original destination preserved.",
+    "category": "Route Protection and Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is redirected to the login page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the original destination is preserved for after login"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Protect authenticated routes from anonymous access",
+    "description": "An unauthenticated visitor is redirected to the login page when trying to open a protected route.",
+    "category": "login/session bootstrap",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the login page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login form is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Cancel a completed sale and restore stock",
+    "description": "Verifies that a user can cancel a completed sale from its detail page and the sale reflects as cancelled while stock is restored.",
+    "category": "Sale Detail and Cancellation",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the sales history page"
+      },
+      {
+        "type": "action",
+        "description": "Open a completed sale from the history list"
+      },
+      {
+        "type": "action",
+        "description": "Cancel the sale"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sale is marked as cancelled"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify stock restoration is reflected in the sale or inventory data"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Inventory page shows stock and movement history after a manual adjustment",
+    "description": "An authenticated user can record a manual inventory adjustment and then see the new movement in the audit history.",
+    "category": "Inventory Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /inventario"
+      },
+      {
+        "type": "action",
+        "description": "Open the manual inventory adjustment form"
+      },
+      {
+        "type": "action",
+        "description": "Select a product"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid stock adjustment quantity"
+      },
+      {
+        "type": "action",
+        "description": "Submit the inventory adjustment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new inventory movement appears in the movement history"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify previous and new stock values are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Log out and end the authenticated session",
+    "description": "An authenticated user can log out and is returned to the login page with protected content no longer accessible.",
+    "category": "logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Log out of the application"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the login page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login form is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Log out and lose access to protected pages",
+    "description": "Verifies that an authenticated user can end the session from the menu and is prevented from returning to protected content.",
+    "category": "Route Protection and Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the user menu"
+      },
+      {
+        "type": "action",
+        "description": "Log out"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the login page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify protected panel content is no longer accessible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "User can review a sale and cancel it to restore stock",
+    "description": "A user can open a completed sale, inspect its details, cancel it, and see the cancellation reflected in inventory-related data.",
+    "category": "Sales History",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /ventas"
+      },
+      {
+        "type": "action",
+        "description": "Open a completed sale from the sales list"
+      },
+      {
+        "type": "action",
+        "description": "Cancel the sale"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sale is marked as cancelled"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify stock restoration information is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Prevent checkout when stock is insufficient",
+    "description": "A seller is warned when a cart quantity exceeds available stock and the sale is not completed.",
+    "category": "Point of Sale (New Sale)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /ventas/nueva"
+      },
+      {
+        "type": "action",
+        "description": "Search for an active product by name or SKU"
+      },
+      {
+        "type": "action",
+        "description": "Add a product to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Increase the cart quantity beyond available stock"
+      },
+      {
+        "type": "action",
+        "description": "Click the checkout action"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the point of sale page remains open"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a stock insufficiency message is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Authenticated user lands on the dashboard after login",
+    "description": "A successful login sends the user into the authenticated dashboard with panel data visible.",
+    "category": "Role Based Permissions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dashboard is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify authenticated dashboard content is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Adjust quantities and remove items before checkout",
+    "description": "A seller can change cart quantities and remove lines before completing a sale, and the sale is registered successfully.",
+    "category": "Point of Sale (New Sale)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /ventas/nueva"
+      },
+      {
+        "type": "action",
+        "description": "Search for an active product by name or SKU"
+      },
+      {
+        "type": "action",
+        "description": "Add a product to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Increase the quantity of the cart line"
+      },
+      {
+        "type": "action",
+        "description": "Decrease the quantity of the cart line"
+      },
+      {
+        "type": "action",
+        "description": "Remove the cart line"
+      },
+      {
+        "type": "action",
+        "description": "Add a product to the cart"
+      },
+      {
+        "type": "action",
+        "description": "Click the checkout action"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sale detail page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sale includes the expected cart contents"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC017",
+    "title": "Create a product in the catalog",
+    "description": "Verifies that an admin can create a new product and see it appear in the refreshed product table.",
+    "category": "Product Catalog Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the products page"
+      },
+      {
+        "type": "action",
+        "description": "Start creating a new product"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the required product details with a unique product name and SKU"
+      },
+      {
+        "type": "action",
+        "description": "Save the product"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new product appears in the catalog table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the product is shown with its category information"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC018",
+    "title": "Register a manual inventory adjustment",
+    "description": "A user can create a manual stock movement and immediately see the new audited entry in the history.",
+    "category": "Inventory and Stock Movements",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /inventario"
+      },
+      {
+        "type": "action",
+        "description": "Select a product in the movement form"
+      },
+      {
+        "type": "action",
+        "description": "Select a movement type"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a quantity for the movement"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a reason for the movement"
+      },
+      {
+        "type": "action",
+        "description": "Submit the movement form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new movement appears in the history"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the movement shows previous and new stock values"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC019",
+    "title": "Create a manual inventory adjustment",
+    "description": "Verifies that a user can submit a manual stock entry or adjustment and see the resulting movement in the audit history.",
+    "category": "Inventory Movement Audit",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the inventory page"
+      },
+      {
+        "type": "action",
+        "description": "Create a manual stock movement for an existing product"
+      },
+      {
+        "type": "action",
+        "description": "Save the inventory movement"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new movement appears in the history"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the movement shows the previous and new stock values"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC020",
+    "title": "Manage the product catalog from the listing page",
+    "description": "An admin can search and filter products, create or edit a product, and see the refreshed catalog with low-stock indicators.",
+    "category": "Product Catalog Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /productos"
+      },
+      {
+        "type": "action",
+        "description": "Search for a product by name or SKU"
+      },
+      {
+        "type": "action",
+        "description": "Filter products by category"
+      },
+      {
+        "type": "action",
+        "description": "Open the create or edit product dialog"
+      },
+      {
+        "type": "action",
+        "description": "Save the product changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the product table is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify product rows and low-stock indicators are visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC021",
+    "title": "Show an error for invalid login credentials",
+    "description": "Verifies that signing in with incorrect credentials keeps the visitor on the login page and shows a generic authentication error.",
+    "category": "User Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with a valid email format that is not authorized"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with an incorrect password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an authentication error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user remains on the login page"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC022",
+    "title": "Admin creates a new product and sees it in the catalog",
+    "description": "An admin can add a new catalog item and the refreshed product table shows the created product.",
+    "category": "Product Catalog Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /productos"
+      },
+      {
+        "type": "action",
+        "description": "Open the new product dialog"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the SKU field with a unique product code"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the name field with a unique product name"
+      },
+      {
+        "type": "action",
+        "description": "Select a category"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the description field with a short product description"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the price field with a valid price"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the cost field with a valid cost"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the stock field with a valid stock quantity"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the minimum stock field with a valid minimum stock quantity"
+      },
+      {
+        "type": "action",
+        "description": "Save the product"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the product appears in the catalog table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a product created success confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC023",
+    "title": "View inventory stock and movement history",
+    "description": "A user can review current stock, low-stock status, and paginated movement history on the inventory page.",
+    "category": "Inventory and Stock Movements",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /inventario"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the current stock table is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the movement history is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC024",
+    "title": "Inspect inventory stock and movement history",
+    "description": "Verifies that a user can open the inventory page and see the current stock table together with movement history.",
+    "category": "Inventory Movement Audit",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the inventory page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the current stock table is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the movement history is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC025",
+    "title": "Inventory page displays low stock visibility and movement audit entries",
+    "description": "An authenticated user can inspect the inventory page and see current stock along with recent movement history and low-stock indicators.",
+    "category": "Inventory Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /inventario"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the current stock table is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify movement history entries are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC026",
+    "title": "Block checkout with an empty cart",
+    "description": "A seller cannot complete checkout without adding any products and remains on the point of sale page.",
+    "category": "Point of Sale (New Sale)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /ventas/nueva"
+      },
+      {
+        "type": "action",
+        "description": "Click the checkout action"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the point of sale page remains open"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a checkout error message is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC027",
+    "title": "View authenticated dashboard metrics and alerts",
+    "description": "Verifies that a logged-in user can see the dashboard KPI cards, chart, top products, and low-stock alerts.",
+    "category": "Dashboard Overview",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dashboard KPI cards are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sales chart, top products, and low-stock alerts are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC028",
+    "title": "Authenticated user can review dashboard overview data",
+    "description": "A signed-in user can open the dashboard and see the key overview content that summarizes sales and inventory status.",
+    "category": "Dashboard Overview",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify KPI cards are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify low stock alerts are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC029",
+    "title": "Admin sees catalog management controls",
+    "description": "An authenticated admin can open the product catalog and see the controls needed to create and manage catalog data.",
+    "category": "Role Based Permissions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /productos"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify product creation controls are available"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify product row management actions are visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC030",
+    "title": "Browse and search the product catalog",
+    "description": "Verifies that an authenticated admin can open the product catalog, search for items, and see the table update with category and low-stock information.",
+    "category": "Product Catalog Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the products page"
+      },
+      {
+        "type": "action",
+        "description": "Search for a product in the catalog"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify matching products are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify category and low-stock information is shown in the table"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC031",
+    "title": "Admin edits an existing product and sees the updated catalog row",
+    "description": "An admin can update an existing product and the catalog refresh shows the edited information.",
+    "category": "Product Catalog Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /productos"
+      },
+      {
+        "type": "action",
+        "description": "Open the edit dialog for an existing product"
+      },
+      {
+        "type": "action",
+        "description": "Change the product name"
+      },
+      {
+        "type": "action",
+        "description": "Save the product changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated product appears in the catalog table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a product updated success confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC032",
+    "title": "Delete a product from the catalog",
+    "description": "An admin can delete a product from the catalog and the item disappears from the active list.",
+    "category": "Product Catalog Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /productos"
+      },
+      {
+        "type": "action",
+        "description": "Open the delete product confirmation"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the product deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the product no longer appears in the listing"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the catalog table remains visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC033",
+    "title": "Seller can access panel routes without admin controls",
+    "description": "An authenticated seller can open the product catalog and view products without seeing admin-only creation or destructive controls.",
+    "category": "Role Based Permissions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /productos"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the product catalog is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify admin-only create and delete controls are not visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC034",
+    "title": "Sales history filters results by date range and status",
+    "description": "An authenticated user can filter the sales list by date range and status and see matching results only.",
+    "category": "Sales History",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /ventas"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid start date"
+      },
+      {
+        "type": "action",
+        "description": "Select a valid end date"
+      },
+      {
+        "type": "action",
+        "description": "Select a completed status filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sales table shows filtered results"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify pagination controls are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC035",
+    "title": "Review sales history with filters and pagination",
+    "description": "Verifies that a user can filter the sales history by date or status and move through multiple pages of results.",
+    "category": "Sales History",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the sales history page"
+      },
+      {
+        "type": "action",
+        "description": "Apply a date filter or status filter"
+      },
+      {
+        "type": "action",
+        "description": "Move to the next page of results"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify filtered sales are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify pagination controls remain available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC036",
+    "title": "Admin deletes a product from the catalog",
+    "description": "An admin can remove a product and it no longer appears in the default product list.",
+    "category": "Product Catalog Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /productos"
+      },
+      {
+        "type": "action",
+        "description": "Open the delete confirmation for an existing product"
+      },
+      {
+        "type": "action",
+        "description": "Confirm product deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the deleted product no longer appears in the catalog table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a product deleted success confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC037",
+    "title": "Create and manage categories",
+    "description": "An admin can create a category and then edit or delete categories from the category management page.",
+    "category": "Category Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /categorias"
+      },
+      {
+        "type": "action",
+        "description": "Open the create category dialog"
+      },
+      {
+        "type": "action",
+        "description": "Save the new category"
+      },
+      {
+        "type": "action",
+        "description": "Open the edit or delete category control"
+      },
+      {
+        "type": "action",
+        "description": "Save the category change or confirm deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the category list is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the category changes are reflected in the list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC038",
+    "title": "Edit an existing product",
+    "description": "Verifies that an admin can update a product from the catalog and see the table reflect the changes.",
+    "category": "Product Catalog Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the products page"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing product for editing"
+      },
+      {
+        "type": "action",
+        "description": "Change the product details"
+      },
+      {
+        "type": "action",
+        "description": "Save the product"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated product appears in the catalog table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the refreshed row shows the updated category or stock status"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC039",
+    "title": "Admin can create, rename, and delete a category",
+    "description": "An admin can manage categories from the categories page and see each change reflected in the list.",
+    "category": "Category Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /categorias"
+      },
+      {
+        "type": "action",
+        "description": "Open the new category dialog"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the category name with a unique value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the category description with a short description"
+      },
+      {
+        "type": "action",
+        "description": "Save the category"
+      },
+      {
+        "type": "action",
+        "description": "Open the edit dialog for the newly created category"
+      },
+      {
+        "type": "action",
+        "description": "Change the category name"
+      },
+      {
+        "type": "action",
+        "description": "Save the category changes"
+      },
+      {
+        "type": "action",
+        "description": "Open the delete confirmation for the category"
+      },
+      {
+        "type": "action",
+        "description": "Confirm category deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the category no longer appears in the category list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a category success confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC040",
+    "title": "Product search and category filtering narrow the catalog list",
+    "description": "An authenticated user can filter the product catalog by search text and category and see the table update accordingly.",
+    "category": "Product Catalog Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /productos"
+      },
+      {
+        "type": "action",
+        "description": "Type a search term into the product search field"
+      },
+      {
+        "type": "action",
+        "description": "Select a category filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the catalog table is filtered to matching products"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify low stock badges are still displayed for qualifying products"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC041",
+    "title": "Review sales history and open a sale detail",
+    "description": "A user can filter sales history and open a sale to inspect its details.",
+    "category": "Sales History",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /ventas"
+      },
+      {
+        "type": "action",
+        "description": "Set a date range filter"
+      },
+      {
+        "type": "action",
+        "description": "Set a status filter"
+      },
+      {
+        "type": "action",
+        "description": "Open a sale from the history list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sale detail page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sale totals and items are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC042",
+    "title": "Manage categories from the categories page",
+    "description": "Verifies that an admin can create or update a category and see the category list refresh.",
+    "category": "Category Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the categories page"
+      },
+      {
+        "type": "action",
+        "description": "Create or edit a category"
+      },
+      {
+        "type": "action",
+        "description": "Save the category"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the category appears in the category list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated category data is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC043",
+    "title": "Open a sale from history and inspect its details",
+    "description": "Verifies that a user can open a sale from the history list and view its items, totals, and customer information.",
+    "category": "Sales History",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the sales history page"
+      },
+      {
+        "type": "action",
+        "description": "Open a sale from the history list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sale detail page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify sale items, totals, and customer information are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC044",
+    "title": "Prevent checkout with an empty cart",
+    "description": "Verifies that the point of sale does not allow checkout until at least one item has been added to the cart.",
+    "category": "Point of Sale Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the new sale page"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to complete checkout without adding items"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a checkout validation message is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sale is not created"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC045",
+    "title": "Validate malformed login input",
+    "description": "Verifies that malformed email input or a missing password is rejected with inline validation and no session is created.",
+    "category": "User Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Clear the email field"
+      },
+      {
+        "type": "action",
+        "description": "Clear the password field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with an invalid email format"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify inline validation messages are visible for the invalid fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user remains on the login page"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC046",
+    "title": "Seller cannot edit a product",
+    "description": "A non-admin seller is blocked from updating a product and the catalog remains unchanged.",
+    "category": "Role Based Permissions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /productos"
+      },
+      {
+        "type": "action",
+        "description": "Open a product row for editing if the action is available"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to submit an update for the product"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a permission error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the product remains unchanged in the catalog"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC047",
+    "title": "Show the low-stock empty state on the dashboard",
+    "description": "Verifies that the dashboard shows an empty-state message when there are no low-stock items to alert.",
+    "category": "Dashboard Overview",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the dashboard low-stock section if needed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty-state message is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the low-stock alert table is not shown"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC048",
+    "title": "Seller cannot delete a category",
+    "description": "A non-admin seller is blocked from deleting a category and the category list stays intact.",
+    "category": "Role Based Permissions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /categorias"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to delete a category if a delete control is available"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a permission error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the category is still listed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC049",
+    "title": "Checkout requires at least one cart item",
+    "description": "A seller cannot complete checkout with an empty cart and remains on the point of sale page.",
+    "category": "Point of Sale Checkout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /ventas/nueva"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the customer field with a customer name"
+      },
+      {
+        "type": "action",
+        "description": "Select a payment method"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to complete the checkout"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a cart validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the point of sale page remains open"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC050",
+    "title": "Show validation for an invalid inventory adjustment",
+    "description": "Verifies that the inventory form rejects an invalid stock adjustment and keeps the existing inventory unchanged.",
+    "category": "Inventory Movement Audit",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "action",
+        "description": "Open the inventory page"
+      },
+      {
+        "type": "action",
+        "description": "Start a stock adjustment with an invalid quantity"
+      },
+      {
+        "type": "action",
+        "description": "Save the inventory movement"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a stock validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the inventory history does not add a new movement"
+      }
+    ],
+    "priority": "Low"
+  }
+]

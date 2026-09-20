@@ -1,0 +1,24 @@
+{
+  "name": "app-gestor-ventas",
+  "private": true,
+  "packageManager": "pnpm@10.5.2",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "build:api": "pnpm --filter @gestor/api build",
+    "build:web": "pnpm --filter @gestor/web build",
+    "start:api": "pnpm --filter @gestor/api start",
+    "start:web": "pnpm --filter @gestor/web start",
+    "api:token": "pnpm --filter @gestor/api run token",
+    "db:up": "docker compose up -d postgres",
+    "db:migrate": "pnpm --filter @gestor/db migrate",
+    "db:seed": "pnpm --filter @gestor/db seed"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "turbo": "2.11.0",
+    "typescript": "^5.9.2"
+  }
+}
