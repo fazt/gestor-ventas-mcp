@@ -299,6 +299,8 @@ Base: `/api`. Todas las respuestas paginadas devuelven `{ data, total, page, pag
 
 Ordenado por lo que más limita hoy el uso real del producto.
 
+> **Estado v2 (2026-10):** resueltos B1 (pantalla y API de equipo), B2 (cambio de contraseña; la recuperación la hace un admin), B3 (matriz de permisos coherente: catálogo solo admin, cancelación admin o vendedor dueño del mismo día), B4 (tests de integración con Vitest + Supertest), B5 (rate limit de login por IP, correo e IP+correo), B6 (búsqueda de ventas en el servidor; `search` MCP ya no filtra en memoria), B7 (impuesto configurable `STORE_TAX_RATE`), B8 (exportación CSV y comprobante imprimible), B10 (cortes por `STORE_TIMEZONE` calculados en Postgres), B12 (sesión web de 12 h; refresh OAuth con rotación y detección de reutilización) y B13 (reporte por rango, vendedor, método de pago y categoría). Siguen abiertos B9 (mitigado por el proxy del panel) y B11.
+
 | ID | Brecha | Impacto | Prioridad |
 |----|--------|---------|-----------|
 | B1 | No hay gestión de usuarios. El rol `seller` funciona en el control de acceso pero no existe forma de crear un vendedor fuera del seed. | El producto no puede usarse con más de una persona. Bloquea el caso multi-vendedor, que es el que justifica los roles. | Alta |

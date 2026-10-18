@@ -1,11 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { AlertTriangle, Banknote, PackageX, Receipt } from "lucide-react";
+import { AlertTriangle, Banknote, PackageX, Percent, Receipt } from "lucide-react";
 import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import { StatCard } from "@/components/stat-card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -28,7 +29,7 @@ const SalesChart = dynamic(
 export default function DashboardPage() {
   const summary = useDashboardSummary();
   const chart = useSalesChart(30);
-  const top = useTopProducts();
+  const top = useTopProducts(30);
   const low = useLowStock();
 
   const s = summary.data;
@@ -37,9 +38,14 @@ export default function DashboardPage() {
     <div>
       <PageHeader
         title="Dashboard"
-        description="Ventas del día y del mes, ticket promedio y alertas de stock."
+        description="Ventas del día y del mes, margen, ticket promedio y alertas de stock."
+        actions={
+          <Button variant="outline" asChild>
+            <Link href="/reportes">Ver reportes</Link>
+          </Button>
+        }
       />
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         <StatCard
           title="Ventas de hoy"
           value={s ? formatMoney(s.todayTotal) : "—"}
@@ -56,6 +62,12 @@ export default function DashboardPage() {
           title="Ticket promedio"
           value={s ? formatMoney(s.averageTicket) : "—"}
           icon={Banknote}
+        />
+        <StatCard
+          title="Margen bruto del mes"
+          value={s ? formatMoney(s.monthGrossMargin) : "—"}
+          hint={s ? `${s.monthMarginPercent}% sobre ventas` : undefined}
+          icon={Percent}
         />
         <StatCard
           title="Bajo stock"
@@ -75,7 +87,7 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Top productos</CardTitle>
+            <CardTitle>Más vendidos (30 días)</CardTitle>
           </CardHeader>
           <CardContent>
             {top.isLoading ? (
@@ -127,7 +139,7 @@ export default function DashboardPage() {
                 (low.data ?? []).map((p) => (
                   <TableRow key={p.id}>
                     <TableCell>
-                      <Link href="/productos" className="hover:underline">
+                      <Link href={`/productos?buscar=${encodeURIComponent(p.sku)}`} className="hover:underline">
                         {p.name}
                       </Link>
                     </TableCell>

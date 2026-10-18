@@ -20,7 +20,8 @@ import {
 import { useProducts } from "@/hooks/use-products";
 import { useCreateSale } from "@/hooks/use-sales";
 import { ApiError } from "@/lib/api";
-import { formatMoney, parseMoney, toMoneyString } from "@/lib/money";
+import { useStoreSettings } from "@/hooks/use-dashboard";
+import { formatMoney, toCents, toMoneyString } from "@/lib/money";
 import { PAYMENT_LABELS } from "@/lib/types";
 
 type CartLine = {
@@ -48,8 +49,9 @@ export default function NewSalePage() {
     page: 1,
     pageSize: 20,
     search: debounced || undefined,
-    isActive: true,
+    isActive: "true",
   });
+  const { data: settings } = useStoreSettings();
 
   const products = data?.data ?? [];
 
@@ -83,12 +85,17 @@ export default function NewSalePage() {
     );
   }
 
-  const subtotal = cart.reduce((sum, line) => sum + parseMoney(line.product.price) * line.quantity, 0);
+  // Cálculo en centavos (igual que la API) para que el total mostrado coincida con el cobrado.
+  const subtotalCents = cart.reduce((sum, line) => sum + toCents(line.product.price) * line.quantity, 0);
   // Mismo formato que `moneySchema` en @gestor/shared: la API rechaza cualquier otra cosa.
   const discountValid = /^\d+(\.\d{1,2})?$/.test(discount.trim());
-  const discountNum = discountValid ? Math.min(parseMoney(discount), subtotal) : 0;
-  const tax = 0;
-  const total = Math.max(0, subtotal - discountNum + tax);
+  const discountCents = discountValid ? Math.min(toCents(discount), subtotalCents) : 0;
+  const taxRate = settings?.taxRate ?? 0;
+  const taxCents = taxRate > 0 ? Math.round(((subtotalCents - discountCents) * taxRate) / 100) : 0;
+  const subtotal = subtotalCents / 100;
+  const discountNum = discountCents / 100;
+  const tax = taxCents / 100;
+  const total = Math.max(0, subtotalCents - discountCents + taxCents) / 100;
 
   async function checkout() {
     if (cart.length === 0) {
@@ -104,7 +111,7 @@ export default function NewSalePage() {
         customerName: customerName || undefined,
         customerDocument: customerDocument || undefined,
         discount: toMoneyString(discountNum),
-        tax: toMoneyString(tax),
+        // Sin `tax`: la API aplica el impuesto configurado (STORE_TAX_RATE).
         paymentMethod,
         items: cart.map((l) => ({ productId: l.product.id, quantity: l.quantity })),
       });
@@ -197,7 +204,7 @@ export default function NewSalePage() {
                         <Plus className="h-4 w-4" />
                       </Button>
                       <span className="ml-auto text-sm font-medium">
-                        {formatMoney(parseMoney(line.product.price) * line.quantity)}
+                        {formatMoney((toCents(line.product.price) * line.quantity) / 100)}
                       </span>
                     </div>
                   </li>
@@ -263,6 +270,14 @@ export default function NewSalePage() {
                 <span>Descuento</span>
                 <span>{formatMoney(discountNum)}</span>
               </div>
+              {taxRate > 0 ? (
+                <div className="flex justify-between">
+                  <span>
+                    {settings?.taxName ?? "Impuesto"} ({taxRate}%)
+                  </span>
+                  <span>{formatMoney(tax)}</span>
+                </div>
+              ) : null}
               <div className="flex justify-between text-base font-semibold">
                 <span>Total</span>
                 <span>{formatMoney(total)}</span>

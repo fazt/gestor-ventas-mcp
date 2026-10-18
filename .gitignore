@@ -2,12 +2,17 @@ node_modules
 dist
 .next
 .turbo
+coverage
+*.log
+.DS_Store
+*.tsbuildinfo
+
+# Variables de entorno: el repo es PÚBLICO, nunca subir secretos.
 .env
 .env.*
 !.env.example
-*.log
-.DS_Store
-coverage
+!.env.prod.example
+
+# Artefactos generados
 openapi.json
 testsprite_tests/tmp/
-testsprite_tests/tmp/config.json

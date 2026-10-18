@@ -20,10 +20,6 @@ export function authorizationServerMetadataUrl(): string {
   return `${publicUrl()}/.well-known/oauth-authorization-server`;
 }
 
-export function loopbackApiUrl(): string {
-  return `http://127.0.0.1:${env.PORT}`;
-}
-
 export function mcpAllowedHosts(): string[] {
   const hosts = new Set<string>(["localhost", "127.0.0.1", "[::1]"]);
 
@@ -44,5 +40,9 @@ export function mcpAllowedHosts(): string[] {
   addHost(env.PUBLIC_URL);
   addHost(env.RAILWAY_PUBLIC_DOMAIN);
   addHost(process.env.RAILWAY_STATIC_URL);
+  // El panel puede reenviar /mcp con su propio Host (nginx o rewrites de Next).
+  for (const origin of env.WEB_ORIGINS) addHost(origin);
+  // Hosts extra (p. ej. el nombre del servicio en Docker): MCP_ALLOWED_HOSTS=api,gestor.local
+  for (const host of (process.env.MCP_ALLOWED_HOSTS ?? "").split(",")) addHost(host.trim() || undefined);
   return [...hosts];
 }

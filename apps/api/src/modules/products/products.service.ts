@@ -1,10 +1,10 @@
-import { categories, db, products } from "@gestor/db";
-import type { CreateProductInput, ProductListQuery, UpdateProductInput } from "@gestor/shared";
-import { and, count, desc, eq, ilike, or, type SQL } from "drizzle-orm";
+import { categories, db, products, stockMovements } from "@gestor/db";
+import type { CreateProductData, ProductListQuery, UpdateProductInput } from "@gestor/shared";
+import { and, count, desc, eq, ilike, or, sql, type SQL } from "drizzle-orm";
 import { AppError, isUniqueViolation } from "../../lib/errors.js";
 import { toProduct } from "../../lib/serialize.js";
 
-function escapeIlike(value: string): string {
+export function escapeIlike(value: string): string {
   return value.replaceAll("\\", "\\\\").replaceAll("%", "\\%").replaceAll("_", "\\_");
 }
 
@@ -22,6 +22,9 @@ function productFilters(query: ProductListQuery): SQL | undefined {
   }
   if (query.isActive !== undefined) {
     clauses.push(eq(products.isActive, query.isActive));
+  }
+  if (query.lowStock) {
+    clauses.push(sql`${products.stock} <= ${products.minStock}`);
   }
   return clauses.length ? and(...clauses) : undefined;
 }
@@ -66,26 +69,41 @@ export async function getProduct(id: number) {
   return toProduct(row);
 }
 
-export async function createProduct(input: CreateProductInput) {
+export async function createProduct(input: CreateProductData, userId: number) {
   await assertCategoryExists(input.categoryId);
   try {
-    const [row] = await db
-      .insert(products)
-      .values({
-        sku: input.sku,
-        name: input.name,
-        description: input.description ?? null,
-        categoryId: input.categoryId,
-        price: input.price,
-        cost: input.cost,
-        stock: input.stock,
-        minStock: input.minStock,
-      })
-      .returning();
-    if (!row) {
-      throw new AppError(500, "No se pudo crear el producto");
-    }
-    return toProduct(row);
+    return await db.transaction(async (tx) => {
+      const [row] = await tx
+        .insert(products)
+        .values({
+          sku: input.sku,
+          name: input.name,
+          description: input.description ?? null,
+          categoryId: input.categoryId,
+          price: input.price,
+          cost: input.cost,
+          stock: input.stock,
+          minStock: input.minStock,
+        })
+        .returning();
+      if (!row) {
+        throw new AppError(500, "No se pudo crear el producto");
+      }
+      // El stock inicial también queda en el historial: el kardex arranca cuadrado.
+      if (row.stock > 0) {
+        await tx.insert(stockMovements).values({
+          productId: row.id,
+          type: "in",
+          quantity: row.stock,
+          previousStock: 0,
+          newStock: row.stock,
+          reason: "Stock inicial",
+          saleId: null,
+          userId,
+        });
+      }
+      return toProduct(row);
+    });
   } catch (error) {
     if (isUniqueViolation(error)) {
       throw new AppError(409, "Ya existe un producto con ese SKU");
@@ -94,35 +112,57 @@ export async function createProduct(input: CreateProductInput) {
   }
 }
 
-export async function updateProduct(id: number, input: UpdateProductInput) {
-  const [existing] = await db.select().from(products).where(eq(products.id, id)).limit(1);
-  if (!existing) {
-    throw new AppError(404, "Producto no encontrado");
-  }
+/**
+ * Edición parcial: solo se tocan los campos presentes. Si cambia el stock, se registra
+ * un movimiento `adjustment` para no perder la trazabilidad del inventario.
+ */
+export async function updateProduct(id: number, input: UpdateProductInput, userId: number) {
   if (input.categoryId !== undefined) {
     await assertCategoryExists(input.categoryId);
   }
 
   try {
-    const [row] = await db
-      .update(products)
-      .set({
-        ...(input.sku !== undefined ? { sku: input.sku } : {}),
-        ...(input.name !== undefined ? { name: input.name } : {}),
-        ...(input.description !== undefined ? { description: input.description } : {}),
-        ...(input.categoryId !== undefined ? { categoryId: input.categoryId } : {}),
-        ...(input.price !== undefined ? { price: input.price } : {}),
-        ...(input.cost !== undefined ? { cost: input.cost } : {}),
-        ...(input.stock !== undefined ? { stock: input.stock } : {}),
-        ...(input.minStock !== undefined ? { minStock: input.minStock } : {}),
-        updatedAt: new Date(),
-      })
-      .where(eq(products.id, id))
-      .returning();
-    if (!row) {
-      throw new AppError(404, "Producto no encontrado");
-    }
-    return toProduct(row);
+    return await db.transaction(async (tx) => {
+      const [existing] = await tx.select().from(products).where(eq(products.id, id)).for("update");
+      if (!existing) {
+        throw new AppError(404, "Producto no encontrado");
+      }
+
+      const [row] = await tx
+        .update(products)
+        .set({
+          ...(input.sku !== undefined ? { sku: input.sku } : {}),
+          ...(input.name !== undefined ? { name: input.name } : {}),
+          ...(input.description !== undefined ? { description: input.description } : {}),
+          ...(input.categoryId !== undefined ? { categoryId: input.categoryId } : {}),
+          ...(input.price !== undefined ? { price: input.price } : {}),
+          ...(input.cost !== undefined ? { cost: input.cost } : {}),
+          ...(input.stock !== undefined ? { stock: input.stock } : {}),
+          ...(input.minStock !== undefined ? { minStock: input.minStock } : {}),
+          ...(input.isActive !== undefined ? { isActive: input.isActive } : {}),
+          updatedAt: new Date(),
+        })
+        .where(eq(products.id, id))
+        .returning();
+      if (!row) {
+        throw new AppError(404, "Producto no encontrado");
+      }
+
+      if (input.stock !== undefined && input.stock !== existing.stock) {
+        await tx.insert(stockMovements).values({
+          productId: id,
+          type: "adjustment",
+          quantity: Math.abs(input.stock - existing.stock),
+          previousStock: existing.stock,
+          newStock: input.stock,
+          reason: "Edición del producto",
+          saleId: null,
+          userId,
+        });
+      }
+
+      return toProduct(row);
+    });
   } catch (error) {
     if (isUniqueViolation(error)) {
       throw new AppError(409, "Ya existe un producto con ese SKU");
@@ -131,11 +171,8 @@ export async function updateProduct(id: number, input: UpdateProductInput) {
   }
 }
 
+/** Baja lógica: el producto queda inactivo (las ventas pasadas lo siguen referenciando). */
 export async function deleteProduct(id: number) {
-  const [existing] = await db.select().from(products).where(eq(products.id, id)).limit(1);
-  if (!existing) {
-    throw new AppError(404, "Producto no encontrado");
-  }
   const [row] = await db
     .update(products)
     .set({ isActive: false, updatedAt: new Date() })

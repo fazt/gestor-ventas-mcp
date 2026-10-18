@@ -6,14 +6,10 @@ import { adjustStock, listLowStock, listMovements } from "./inventory.service.js
 
 export const inventoryRouter = Router();
 
-inventoryRouter.get(
-  "/movements",
-  validate({ query: stockMovementListQuerySchema }),
-  async (req, res) => {
-    const query = stockMovementListQuerySchema.parse(req.query);
-    res.json(await listMovements(query));
-  },
-);
+inventoryRouter.get("/movements", async (req, res) => {
+  const query = stockMovementListQuerySchema.parse(req.query);
+  res.json(await listMovements(query));
+});
 
 inventoryRouter.get("/low-stock", async (_req, res) => {
   res.json(await listLowStock());

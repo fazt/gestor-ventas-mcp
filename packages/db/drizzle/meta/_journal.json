@@ -15,6 +15,13 @@
       "when": 1789841313312,
       "tag": "0001_noisy_lockheed",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792310400000,
+      "tag": "0002_produccion_mcp",
+      "breakpoints": true
     }
   ]
 }

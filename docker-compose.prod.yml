@@ -1,0 +1,78 @@
+# Despliegue completo: Postgres + API/MCP + panel.
+#   cp .env.prod.example .env.prod   # y cambia los secretos
+#   docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+# El panel queda en http://localhost:${WEB_PORT:-8139}. MCP, OAuth y /.well-known se
+# sirven desde el mismo dominio (rewrites del panel), por eso PUBLIC_URL = URL del panel.
+# En internet pon delante un proxy con HTTPS (Caddy, Traefik, nginx) y usa esa URL.
+
+name: gestor-ventas-mcp-prod
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-gestor}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-gestor_ventas}
+    volumes:
+      - gestor-ventas-prod-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 4070
+      DATABASE_URL: postgresql://${POSTGRES_USER:-gestor}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-gestor_ventas}
+      JWT_SECRET: ${JWT_SECRET:?Define JWT_SECRET (32+ caracteres)}
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:8139}
+      WEB_ORIGIN: ${PUBLIC_URL:-http://localhost:8139}
+      # El panel reenvía /mcp con Host "api:4070".
+      MCP_ALLOWED_HOSTS: api
+      TRUST_PROXY: ${TRUST_PROXY:-2}
+      COOKIE_SAMESITE: lax
+      # Sin HTTPS delante (prueba local en http://localhost) pon COOKIE_SECURE=false.
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      STORE_NAME: ${STORE_NAME:-Mi tienda}
+      STORE_TIMEZONE: ${STORE_TIMEZONE:-America/Lima}
+      STORE_CURRENCY: ${STORE_CURRENCY:-PEN}
+      STORE_TAX_RATE: ${STORE_TAX_RATE:-0}
+      STORE_TAX_NAME: ${STORE_TAX_NAME:-IGV}
+      SEED_ON_START: ${SEED_ON_START:-false}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@ventas.com}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-}
+      SEED_SELLER_EMAIL: ${SEED_SELLER_EMAIL:-vendedor@ventas.com}
+      SEED_SELLER_PASSWORD: ${SEED_SELLER_PASSWORD:-}
+    stop_grace_period: 15s
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        API_INTERNAL_URL: http://api:4070
+        NEXT_PUBLIC_DEMO_MODE: ${NEXT_PUBLIC_DEMO_MODE:-false}
+        NEXT_PUBLIC_CURRENCY: ${STORE_CURRENCY:-PEN}
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      API_INTERNAL_URL: http://api:4070
+    ports:
+      - "${WEB_PORT:-8139}:3000"
+
+volumes:
+  gestor-ventas-prod-data:

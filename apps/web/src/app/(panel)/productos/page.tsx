@@ -57,6 +57,12 @@ export default function ProductsPage() {
   const [categoryId, setCategoryId] = React.useState<string>("all");
   const [page, setPage] = React.useState(1);
 
+  // Enlaces desde el asistente MCP: /productos?buscar=SKU-001
+  React.useEffect(() => {
+    const initial = new URLSearchParams(window.location.search).get("buscar");
+    if (initial) setSearch(initial);
+  }, []);
+
   React.useEffect(() => {
     const t = setTimeout(() => {
       setDebounced(search);
@@ -133,7 +139,10 @@ export default function ProductsPage() {
         categoryId: Number(values.categoryId),
       };
       if (editing) {
-        await update.mutateAsync({ id: editing.id, ...payload });
+        // El stock no se edita aquí: se mueve desde Inventario para que quede en el historial.
+        const changes: Partial<typeof payload> = { ...payload };
+        delete changes.stock;
+        await update.mutateAsync({ id: editing.id, ...changes });
         toast.success("Producto actualizado");
       } else {
         await create.mutateAsync(payload);
@@ -181,10 +190,16 @@ export default function ProductsPage() {
       cell: (row) =>
         isAdmin ? (
           <div className="flex justify-end gap-1">
-            <Button variant="ghost" size="icon" onClick={() => openEdit(row)}>
+            <Button variant="ghost" size="icon" onClick={() => openEdit(row)} aria-label={`Editar ${row.name}`}>
               <Pencil className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => setToDelete(row)}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setToDelete(row)}
+              disabled={!row.isActive}
+              aria-label={`Dar de baja ${row.name}`}
+            >
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
@@ -302,8 +317,20 @@ export default function ProductsPage() {
                 <Input id="cost" {...form.register("cost")} disabled={!isAdmin} />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="stock">Stock</Label>
-                <Input id="stock" type="number" {...form.register("stock", { valueAsNumber: true })} disabled={!isAdmin} />
+                <Label htmlFor="stock">{editing ? "Stock actual" : "Stock inicial"}</Label>
+                <Input
+                  id="stock"
+                  type="number"
+                  min={0}
+                  {...form.register("stock", { valueAsNumber: true })}
+                  disabled={!isAdmin || Boolean(editing)}
+                  aria-describedby={editing ? "stock-hint" : undefined}
+                />
+                {editing ? (
+                  <p id="stock-hint" className="text-xs text-muted-foreground">
+                    Para cambiarlo registra una entrada, salida o conteo en Inventario.
+                  </p>
+                ) : null}
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="minStock">Stock mínimo</Label>
@@ -332,15 +359,15 @@ export default function ProductsPage() {
       <ConfirmDialog
         open={Boolean(toDelete)}
         onOpenChange={(v) => !v && setToDelete(null)}
-        title="Eliminar producto"
-        description={`¿Desactivar o eliminar “${toDelete?.name}”?`}
-        confirmLabel="Eliminar"
+        title="Dar de baja el producto"
+        description={`“${toDelete?.name}” quedará inactivo: no aparecerá en el punto de venta, pero se conserva su historial de ventas.`}
+        confirmLabel="Dar de baja"
         destructive
         onConfirm={async () => {
           if (!toDelete) return;
           try {
             await remove.mutateAsync(toDelete.id);
-            toast.success("Producto eliminado");
+            toast.success("Producto dado de baja");
           } catch (error) {
             toast.error(error instanceof ApiError ? error.message : "No se pudo eliminar");
             throw error;

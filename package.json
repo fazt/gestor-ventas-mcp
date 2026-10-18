@@ -1,21 +1,29 @@
 {
-  "name": "app-gestor-ventas",
+  "name": "gestor-ventas-mcp",
   "private": true,
   "packageManager": "pnpm@10.5.2",
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "build:api": "pnpm --filter @gestor/api build",
+    "typecheck": "turbo typecheck",
+    "lint": "turbo lint",
+    "test": "pnpm --filter @gestor/api test",
+    "dev:api": "pnpm --filter @gestor/api dev",
+    "dev:web": "pnpm --filter @gestor/web dev",
     "build:web": "pnpm --filter @gestor/web build",
     "start:api": "pnpm --filter @gestor/api start",
     "start:web": "pnpm --filter @gestor/web start",
     "api:token": "pnpm --filter @gestor/api run token",
     "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
     "db:migrate": "pnpm --filter @gestor/db migrate",
-    "db:seed": "pnpm --filter @gestor/db seed"
+    "db:generate": "pnpm --filter @gestor/db generate",
+    "db:seed": "pnpm --filter @gestor/db seed",
+    "prod:up": "docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build",
+    "prod:down": "docker compose -f docker-compose.prod.yml --env-file .env.prod down"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20.19"
   },
   "devDependencies": {
     "turbo": "2.11.0",

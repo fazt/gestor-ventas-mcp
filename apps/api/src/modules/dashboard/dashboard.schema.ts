@@ -1,5 +1,5 @@
 /// <reference types="zod-openapi" />
-import { moneySchema } from "@gestor/shared";
+import { dateOnlySchema, moneySchema } from "@gestor/shared";
 import { z } from "zod";
 
 export const dashboardSummarySchema = z
@@ -10,6 +10,10 @@ export const dashboardSummarySchema = z
     monthTotal: moneySchema,
     averageTicket: moneySchema,
     lowStockCount: z.number().int().meta({ example: 2 }),
+    monthGrossMargin: moneySchema,
+    monthMarginPercent: z.number().meta({ example: 38.5 }),
+    currency: z.string().meta({ example: "PEN" }),
+    timezone: z.string().meta({ example: "America/Lima" }),
   })
   .meta({
     id: "DashboardSummary",
@@ -63,3 +67,16 @@ export const topProductsSchema = z
     data: z.array(topProductSchema),
   })
   .meta({ id: "TopProducts" });
+
+export const topProductsRangeQuerySchema = topProductsQuerySchema
+  .extend({
+    days: z.coerce.number().int().min(1).max(365).optional().meta({ example: 30 }),
+  })
+  .meta({ id: "TopProductsRangeQuery" });
+
+export const reportQuerySchema = z
+  .object({
+    from: dateOnlySchema,
+    to: dateOnlySchema,
+  })
+  .meta({ id: "ReportQuery", example: { from: "2026-01-01", to: "2026-01-31" } });

@@ -1,12 +1,5 @@
 import type {
-  Category,
-  Product,
-  PublicUser,
-  Sale,
-  SaleItem,
-  StockMovement,
-} from "@gestor/shared";
-import type {
+  apiTokens,
   categories,
   products,
   saleItems,
@@ -14,6 +7,17 @@ import type {
   stockMovements,
   users,
 } from "@gestor/db";
+import type {
+  ApiToken,
+  ApiTokenScope,
+  Category,
+  Product,
+  PublicUser,
+  Sale,
+  SaleItem,
+  StockMovement,
+  User,
+} from "@gestor/shared";
 import { asMoney } from "./money.js";
 
 type UserRow = typeof users.$inferSelect;
@@ -22,6 +26,11 @@ type ProductRow = typeof products.$inferSelect;
 type SaleRow = typeof sales.$inferSelect;
 type SaleItemRow = typeof saleItems.$inferSelect;
 type StockMovementRow = typeof stockMovements.$inferSelect;
+type ApiTokenRow = typeof apiTokens.$inferSelect;
+
+function iso(date: Date | null | undefined): string | null {
+  return date ? date.toISOString() : null;
+}
 
 export function toPublicUser(row: UserRow): PublicUser {
   return {
@@ -31,6 +40,10 @@ export function toPublicUser(row: UserRow): PublicUser {
     role: row.role,
     isActive: row.isActive,
   };
+}
+
+export function toUser(row: UserRow): User {
+  return { ...toPublicUser(row), createdAt: row.createdAt.toISOString() };
 }
 
 export function toCategory(row: CategoryRow): Category {
@@ -60,11 +73,12 @@ export function toProduct(row: ProductRow): Product {
   };
 }
 
-export function toSale(row: SaleRow): Sale {
+export function toSale(row: SaleRow, sellerName: string | null = null): Sale {
   return {
     id: row.id,
     code: row.code,
     userId: row.userId,
+    sellerName,
     customerName: row.customerName,
     customerDocument: row.customerDocument,
     subtotal: asMoney(row.subtotal),
@@ -73,6 +87,9 @@ export function toSale(row: SaleRow): Sale {
     total: asMoney(row.total),
     paymentMethod: row.paymentMethod,
     status: row.status,
+    cancelledAt: iso(row.cancelledAt),
+    cancelledBy: row.cancelledBy,
+    cancelReason: row.cancelReason,
     createdAt: row.createdAt.toISOString(),
   };
 }
@@ -89,10 +106,15 @@ export function toSaleItem(row: SaleItemRow): SaleItem {
   };
 }
 
-export function toStockMovement(row: StockMovementRow): StockMovement {
+export function toStockMovement(
+  row: StockMovementRow,
+  extra: { productName?: string | null; productSku?: string | null; userName?: string | null } = {},
+): StockMovement {
   return {
     id: row.id,
     productId: row.productId,
+    productName: extra.productName ?? null,
+    productSku: extra.productSku ?? null,
     type: row.type,
     quantity: row.quantity,
     previousStock: row.previousStock,
@@ -100,6 +122,23 @@ export function toStockMovement(row: StockMovementRow): StockMovement {
     reason: row.reason,
     saleId: row.saleId,
     userId: row.userId,
+    userName: extra.userName ?? null,
+    createdAt: row.createdAt.toISOString(),
+  };
+}
+
+export function toApiToken(row: ApiTokenRow): ApiToken {
+  const scopes = (Array.isArray(row.scopes) ? row.scopes : []).filter(
+    (scope): scope is ApiTokenScope => scope === "read" || scope === "write",
+  );
+  return {
+    id: row.id,
+    name: row.name,
+    tokenPrefix: row.tokenPrefix,
+    scopes,
+    lastUsedAt: iso(row.lastUsedAt),
+    expiresAt: iso(row.expiresAt),
+    revokedAt: iso(row.revokedAt),
     createdAt: row.createdAt.toISOString(),
   };
 }

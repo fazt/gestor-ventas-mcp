@@ -13,6 +13,14 @@ import { Label } from "@/components/ui/label";
 import { useLogin } from "@/hooks/use-auth";
 import { ApiError } from "@/lib/api";
 
+const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+
+/** Solo rutas internas: evita usar `?from=//otro-sitio.com` como redirección abierta. */
+function safeFrom(value: string | null): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//") || value.startsWith("/\\")) return "/dashboard";
+  return value;
+}
+
 type LoginForm = {
   email: string;
   password: string;
@@ -24,14 +32,14 @@ function LoginForm() {
   const login = useLogin();
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: "admin@ventas.com", password: "admin123" },
+    defaultValues: DEMO_MODE ? { email: "admin@ventas.com", password: "admin123" } : { email: "", password: "" },
   });
 
   async function onSubmit(values: LoginForm) {
     try {
       await login.mutateAsync(values);
       toast.success("Bienvenido");
-      router.replace(searchParams.get("from") || "/dashboard");
+      router.replace(safeFrom(searchParams.get("from")));
     } catch (error) {
       toast.error(error instanceof ApiError ? error.message : "No se pudo iniciar sesión");
     }
@@ -68,6 +76,12 @@ function LoginForm() {
             {login.isPending ? "Ingresando…" : "Entrar"}
           </Button>
         </form>
+        {DEMO_MODE ? (
+          <p className="mt-4 rounded-md bg-muted p-3 text-xs text-muted-foreground">
+            Demo: <strong>admin@ventas.com</strong> o <strong>vendedor@ventas.com</strong>, contraseña{" "}
+            <strong>admin123</strong>.
+          </p>
+        ) : null}
       </CardContent>
     </Card>
   );
@@ -75,7 +89,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(ellipse_at_top,_oklch(0.92_0.04_168),_transparent_55%),linear-gradient(180deg,oklch(0.97_0.01_80),oklch(0.94_0.02_250))] p-4">
+    <div className="relative flex min-h-screen items-center justify-center bg-[radial-gradient(ellipse_at_top,_oklch(0.92_0.04_168),_transparent_55%),linear-gradient(180deg,oklch(0.97_0.01_80),oklch(0.94_0.02_250))] p-4 pt-20 dark:bg-[radial-gradient(ellipse_at_top,_oklch(0.3_0.05_168),_transparent_55%),linear-gradient(180deg,oklch(0.18_0.01_250),oklch(0.14_0.02_250))]">
       <div className="absolute left-6 top-6 flex items-center gap-2">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
           GV

@@ -32,6 +32,8 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|api/|health|mcp|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // Fuera del middleware: estáticos, el proxy /api y las rutas que se reenvían a la API
+    // (MCP, OAuth y metadatos .well-known), que tienen su propia autenticación.
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|api/|health|mcp|oauth|\\.well-known|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };

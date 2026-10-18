@@ -3,20 +3,20 @@ import type {
   PaginatedResponse,
   Product,
   StockMovement,
-  StockMovementListQuery,
+  StockMovementListParams,
 } from "@gestor/shared";
-import { api, asPaginated, unwrapList, toQuery } from "@/lib/api";
+import { api, asPaginated, toQuery, unwrapList } from "@/lib/api";
 import { queryKeys } from "@/lib/query-keys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export function useStockMovements(params: StockMovementListQuery) {
+export function useStockMovements(params: StockMovementListParams) {
   return useQuery({
     queryKey: queryKeys.movements(params),
     queryFn: async () => {
       const payload = await api<StockMovement[] | PaginatedResponse<StockMovement>>(
         `/api/inventory/movements${toQuery(params)}`,
       );
-      return asPaginated(payload, params.page ?? 1, params.pageSize ?? 20);
+      return asPaginated(payload, Number(params.page ?? 1), Number(params.pageSize ?? 20));
     },
   });
 }
@@ -35,7 +35,7 @@ export function useAdjustStock() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (body: AdjustStockInput) =>
-      api<StockMovement>("/api/inventory/adjust", {
+      api<{ product: Product; movement: StockMovement }>("/api/inventory/adjust", {
         method: "POST",
         body: JSON.stringify(body),
       }),

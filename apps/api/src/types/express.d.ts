@@ -1,4 +1,4 @@
-import type { UserRole } from "@gestor/shared";
+import type { ApiTokenScope, UserRole } from "@gestor/shared";
 
 declare global {
   namespace Express {
@@ -10,6 +10,10 @@ declare global {
         role: UserRole;
         isActive: boolean;
       };
+      /** Cómo se autenticó la petición REST. */
+      principal?:
+        | { kind: "session"; scopes: ApiTokenScope[] }
+        | { kind: "pat"; tokenId: number; scopes: ApiTokenScope[] };
     }
   }
 }

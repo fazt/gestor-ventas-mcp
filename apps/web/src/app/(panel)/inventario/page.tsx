@@ -28,7 +28,7 @@ import { MOVEMENT_LABELS } from "@/lib/types";
 
 type AdjustForm = {
   productId: number;
-  type: "in" | "adjustment";
+  type: "in" | "out" | "adjustment";
   quantity: number;
   reason: string;
 };
@@ -36,7 +36,7 @@ type AdjustForm = {
 export default function InventoryPage() {
   const [page, setPage] = React.useState(1);
   const [type, setType] = React.useState("all");
-  const { data: productsPage } = useProducts({ page: 1, pageSize: 100, isActive: true });
+  const { data: productsPage } = useProducts({ page: 1, pageSize: 100, isActive: "true" });
   const products = productsPage?.data ?? [];
   const { data: lowStock = [] } = useLowStock();
   const { data: movements, isLoading } = useStockMovements({
@@ -92,7 +92,7 @@ export default function InventoryPage() {
       header: "Fecha",
       cell: (row) => format(new Date(row.createdAt), "dd/MM/yyyy HH:mm"),
     },
-    { id: "product", header: "Producto", cell: (row) => productName(row.productId) },
+    { id: "product", header: "Producto", cell: (row) => row.productName ?? productName(row.productId) },
     {
       id: "type",
       header: "Tipo",
@@ -105,6 +105,7 @@ export default function InventoryPage() {
       cell: (row) => `${row.previousStock} → ${row.newStock}`,
     },
     { id: "reason", header: "Motivo", cell: (row) => row.reason || "—" },
+    { id: "user", header: "Usuario", cell: (row) => row.userName ?? "—" },
   ];
 
   return (
@@ -151,27 +152,30 @@ export default function InventoryPage() {
                 <Select
                   value={movementType}
                   onValueChange={(v) =>
-                    form.setValue("type", (v ?? "in") as "in" | "adjustment", { shouldValidate: true })
+                    form.setValue("type", (v ?? "in") as "in" | "out" | "adjustment", { shouldValidate: true })
                   }
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="in">Entrada</SelectItem>
-                    <SelectItem value="adjustment">Ajuste</SelectItem>
+                    <SelectItem value="in">Entrada (compra, reposición)</SelectItem>
+                    <SelectItem value="out">Salida (merma, rotura, devolución)</SelectItem>
+                    <SelectItem value="adjustment">Ajuste por conteo físico</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="quantity">
-                  {movementType === "in" ? "Cantidad a ingresar" : "Nuevo stock"}
+                  {movementType === "in" ? "Cantidad a ingresar" : movementType === "out" ? "Cantidad a retirar" : "Stock contado"}
                 </Label>
-                <Input id="quantity" type="number" {...form.register("quantity", { valueAsNumber: true })} />
+                <Input id="quantity" type="number" min={0} {...form.register("quantity", { valueAsNumber: true })} />
                 <p className="text-xs text-muted-foreground">
                   {movementType === "in"
                     ? "Se suma al stock actual del producto."
-                    : "Reemplaza el stock actual por este valor absoluto."}
+                    : movementType === "out"
+                      ? "Se resta del stock actual; no puede dejarlo negativo."
+                      : "Reemplaza el stock por lo contado (puede ser 0) y guarda la diferencia."}
                 </p>
               </div>
               <div className="grid gap-2">

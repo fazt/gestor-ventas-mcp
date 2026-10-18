@@ -1,6 +1,9 @@
 import { createHash, randomBytes } from "node:crypto";
 
-const base = "http://127.0.0.1:4000";
+// Uso: node apps/api/scripts/smoke-mcp.mjs [baseUrl] (API en marcha y seed cargado)
+const base = (process.argv[2] ?? process.env.SMOKE_BASE_URL ?? "http://127.0.0.1:4070").replace(/\/$/, "");
+const email = process.env.SMOKE_EMAIL ?? "admin@ventas.com";
+const password = process.env.SMOKE_PASSWORD ?? "admin123";
 const resource = `${base}/mcp`;
 
 function pkce() {
@@ -51,8 +54,9 @@ async function main() {
       code_challenge_method: "S256",
       resource,
       state: "xyz",
-      email: "admin@ventas.com",
-      password: "admin123",
+      decision: "allow",
+      email,
+      password,
     }),
   });
   const location = authorize.headers.get("location");

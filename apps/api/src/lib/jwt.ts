@@ -5,13 +5,17 @@ import { env } from "./env.js";
 import { AppError } from "./errors.js";
 import { mcpResourceUrl, oauthIssuer } from "./urls.js";
 
-export const WEB_TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7;
-export const API_TOKEN_TTL_SECONDS = 60 * 5;
+export const WEB_TOKEN_TTL_SECONDS = 60 * 60 * 12;
 export const MCP_ACCESS_TTL_SECONDS = 60 * 15;
 
 export const AUD_WEB = "web";
-export const AUD_API = "api";
+export const AUTH_COOKIE = "token";
 
+/**
+ * Claims del JWT. El rol y el estado se vuelven a leer de la base en cada petición:
+ * lo que viaja en el token es solo informativo (desactivar o degradar a un usuario
+ * corta el acceso al instante, sin esperar a que caduque).
+ */
 export type JwtPayload = {
   sub: string;
   role: UserRole;
@@ -20,11 +24,13 @@ export type JwtPayload = {
   aud?: string | string[];
   iss?: string;
   scope?: string;
+  client_id?: string;
+  exp?: number;
 };
 
 type SignUser = Pick<JwtPayload, "sub" | "role" | "email" | "name">;
 
-function audienceOf(payload: jwt.JwtPayload | JwtPayload): string | undefined {
+function audienceOf(payload: JwtPayload): string | undefined {
   const aud = payload.aud;
   if (Array.isArray(aud)) {
     return aud[0];
@@ -35,19 +41,8 @@ function audienceOf(payload: jwt.JwtPayload | JwtPayload): string | undefined {
 export function signWebToken(payload: SignUser): string {
   return jwt.sign({ ...payload, aud: AUD_WEB, iss: oauthIssuer() }, env.JWT_SECRET, {
     expiresIn: WEB_TOKEN_TTL_SECONDS,
+    algorithm: "HS256",
   });
-}
-
-/** Un `ttlSeconds` <= 0 firma un token sin `exp`, reservado a pruebas locales. */
-export function signApiToken(
-  payload: SignUser,
-  ttlSeconds: number = API_TOKEN_TTL_SECONDS,
-): string {
-  const claims = { ...payload, aud: AUD_API, iss: oauthIssuer() };
-  if (ttlSeconds <= 0) {
-    return jwt.sign(claims, env.JWT_SECRET);
-  }
-  return jwt.sign(claims, env.JWT_SECRET, { expiresIn: ttlSeconds });
 }
 
 export function signMcpAccessToken(payload: SignUser & { clientId: string }): string {
@@ -63,30 +58,23 @@ export function signMcpAccessToken(payload: SignUser & { clientId: string }): st
       scope: "mcp",
     },
     env.JWT_SECRET,
-    { expiresIn: MCP_ACCESS_TTL_SECONDS },
+    { expiresIn: MCP_ACCESS_TTL_SECONDS, algorithm: "HS256" },
   );
 }
 
-/** @deprecated use signWebToken */
-export function signToken(payload: SignUser): string {
-  return signWebToken(payload);
-}
-
-export function verifyToken(token: string, expectedAud?: string): JwtPayload {
+export function verifyToken(token: string, expectedAud: string): JwtPayload {
   try {
-    const decoded = jwt.verify(token, env.JWT_SECRET);
+    const decoded = jwt.verify(token, env.JWT_SECRET, {
+      algorithms: ["HS256"],
+      issuer: oauthIssuer(),
+    });
     if (typeof decoded !== "object" || decoded === null || typeof decoded.sub !== "string") {
       throw new AppError(401, "Token inválido");
     }
-
     const payload = decoded as JwtPayload;
-    if (expectedAud) {
-      const aud = audienceOf(payload);
-      if (aud !== expectedAud) {
-        throw new AppError(401, "Token inválido");
-      }
+    if (audienceOf(payload) !== expectedAud) {
+      throw new AppError(401, "Token inválido");
     }
-
     return payload;
   } catch (error) {
     if (error instanceof AppError) {
@@ -97,16 +85,7 @@ export function verifyToken(token: string, expectedAud?: string): JwtPayload {
 }
 
 export function verifyWebToken(token: string): JwtPayload {
-  const payload = verifyToken(token);
-  const aud = audienceOf(payload);
-  if (aud && aud !== AUD_WEB) {
-    throw new AppError(401, "Token inválido");
-  }
-  return payload;
-}
-
-export function verifyApiToken(token: string): JwtPayload {
-  return verifyToken(token, AUD_API);
+  return verifyToken(token, AUD_WEB);
 }
 
 export function verifyMcpAccessToken(token: string): JwtPayload {
@@ -114,12 +93,17 @@ export function verifyMcpAccessToken(token: string): JwtPayload {
 }
 
 export function authCookieOptions(): CookieOptions {
-  const isProd = env.NODE_ENV === "production";
   return {
     httpOnly: true,
-    sameSite: "lax",
-    secure: isProd,
+    sameSite: env.COOKIE_SAMESITE,
+    secure: env.COOKIE_SECURE,
     path: "/",
     maxAge: WEB_TOKEN_TTL_SECONDS * 1000,
   };
+}
+
+/** Para `clearCookie`: mismas opciones salvo `maxAge` (Express 5 avisa si se pasa). */
+export function clearAuthCookieOptions(): CookieOptions {
+  const { maxAge: _maxAge, ...rest } = authCookieOptions();
+  return rest;
 }

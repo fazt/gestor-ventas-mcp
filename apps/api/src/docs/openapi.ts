@@ -7,6 +7,7 @@ import { dashboardPaths } from "../modules/dashboard/dashboard.openapi.js";
 import { inventoryPaths } from "../modules/inventory/inventory.openapi.js";
 import { productPaths } from "../modules/products/products.openapi.js";
 import { salePaths } from "../modules/sales/sales.openapi.js";
+import { extraPaths } from "./extra.openapi.js";
 
 export const errorResponseSchema = z
   .object({
@@ -31,9 +32,9 @@ export const openApiDocument = createDocument({
   openapi: "3.1.0",
   info: {
     title: "Gestor de Ventas API",
-    version: "1.0.0",
+    version: "2.0.0",
     description:
-      "API del gestor de ventas. Autenticación por cookie httpOnly `token`. Ejecuta POST /api/auth/login desde Swagger UI para autenticar el resto de endpoints.",
+      "API del gestor de ventas. Autenticación por cookie httpOnly `token` (panel) o `Authorization: Bearer gv_...` (token personal creado en Integraciones). Ejecuta POST /api/auth/login desde Swagger UI para autenticar el resto de endpoints.",
   },
   tags: [
     { name: "Auth", description: "Inicio y cierre de sesión" },
@@ -41,15 +42,22 @@ export const openApiDocument = createDocument({
     { name: "Categorias", description: "Categorías del catálogo" },
     { name: "Ventas", description: "Registro y cancelación de ventas" },
     { name: "Inventario", description: "Movimientos y ajustes de stock" },
-    { name: "Dashboard", description: "Métricas agregadas" },
+    { name: "Dashboard", description: "Métricas agregadas y reportes" },
+    { name: "Equipo", description: "Usuarios y roles (solo administradores)" },
+    { name: "Integraciones", description: "Tokens personales y bitácora MCP" },
   ],
-  security: [{ cookieAuth: [] }],
+  security: [{ cookieAuth: [] }, { bearerAuth: [] }],
   components: {
     securitySchemes: {
       cookieAuth: {
         type: "apiKey",
         in: "cookie",
         name: "token",
+      },
+      bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        description: "Token personal gv_... (Integraciones → Nuevo token)",
       },
     },
     responses: {
@@ -82,5 +90,6 @@ export const openApiDocument = createDocument({
     ...salePaths,
     ...inventoryPaths,
     ...dashboardPaths,
+    ...extraPaths,
   },
 });

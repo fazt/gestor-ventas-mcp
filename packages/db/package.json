@@ -10,7 +10,8 @@
     "build": "tsc --noEmit",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
-    "seed": "tsx src/seed.ts"
+    "seed": "tsx src/seed.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

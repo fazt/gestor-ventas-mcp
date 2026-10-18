@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3000 --webpack",
+    "dev": "next dev --hostname 127.0.0.1 --port 5239 --webpack",
     "build": "next build --webpack",
-    "start": "next start",
+    "start": "next start --port 5239",
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },

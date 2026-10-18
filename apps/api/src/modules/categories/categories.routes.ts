@@ -22,7 +22,7 @@ categoriesRouter.get("/:id", validate({ params: idParamSchema }), async (req, re
   res.json(await getCategory(id));
 });
 
-categoriesRouter.post("/", validate({ body: createCategorySchema }), async (req, res) => {
+categoriesRouter.post("/", requireRole("admin"), validate({ body: createCategorySchema }), async (req, res) => {
   const category = await createCategory(req.body);
   res.status(201).json(category);
 });

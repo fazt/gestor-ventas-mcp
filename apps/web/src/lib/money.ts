@@ -1,6 +1,9 @@
-const pen = new Intl.NumberFormat("es-PE", {
+const CURRENCY = process.env.NEXT_PUBLIC_CURRENCY?.trim() || "PEN";
+const LOCALE = process.env.NEXT_PUBLIC_LOCALE?.trim() || "es-PE";
+
+const formatter = new Intl.NumberFormat(LOCALE, {
   style: "currency",
-  currency: "PEN",
+  currency: CURRENCY,
 });
 
 export function parseMoney(value: string | number | null | undefined): number {
@@ -10,10 +13,15 @@ export function parseMoney(value: string | number | null | undefined): number {
   return Number.isFinite(n) ? n : 0;
 }
 
+/** Centavos enteros: evita que 0.1 + 0.2 muestre 0.30000000000000004. */
+export function toCents(value: string | number | null | undefined): number {
+  return Math.round(parseMoney(value) * 100);
+}
+
 export function formatMoney(value: string | number | null | undefined): string {
-  return pen.format(parseMoney(value));
+  return formatter.format(parseMoney(value));
 }
 
 export function toMoneyString(value: number): string {
-  return value.toFixed(2);
+  return (Math.round(value * 100) / 100).toFixed(2);
 }

@@ -38,10 +38,14 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
   });
 
   if (res.status === 401) {
-    if (typeof window !== "undefined" && window.location.pathname !== "/login") {
-      window.location.assign("/login");
+    const message = await parseError(res);
+    if (typeof window !== "undefined" && window.location.pathname !== "/login" && path !== "/api/auth/login") {
+      // Borra la cookie vencida o inválida antes de ir al login: si no, el middleware
+      // ve la cookie, redirige /login → /dashboard y se forma un bucle.
+      await fetch(`${API_URL}/api/auth/logout`, { method: "POST", credentials: "include" }).catch(() => undefined);
+      window.location.assign(`/login?from=${encodeURIComponent(window.location.pathname)}`);
     }
-    throw new ApiError(401, await parseError(res));
+    throw new ApiError(401, message);
   }
 
   if (!res.ok) {
@@ -57,9 +61,10 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
   return JSON.parse(text) as T;
 }
 
-export function toQuery(params: Record<string, string | number | boolean | undefined | null>): string {
+/** Acepta cualquier objeto plano (los tipos de entrada de zod usan `unknown` en campos coercibles). */
+export function toQuery(params: object): string {
   const search = new URLSearchParams();
-  for (const [key, value] of Object.entries(params)) {
+  for (const [key, value] of Object.entries(params as Record<string, unknown>)) {
     if (value === undefined || value === null || value === "") continue;
     search.set(key, String(value));
   }
@@ -85,4 +90,26 @@ export function asPaginated<T>(
     };
   }
   return payload;
+}
+
+/**
+ * Descarga un archivo autenticado (CSV, etc.). Un <a href> directo no sirve si el panel
+ * llama a la API en otro origen; con fetch + credentials viaja la cookie de sesión.
+ */
+export async function downloadFile(path: string, fallbackName: string): Promise<void> {
+  const res = await fetch(`${API_URL}${path}`, { credentials: "include" });
+  if (!res.ok) {
+    throw new ApiError(res.status, await parseError(res));
+  }
+  const blob = await res.blob();
+  const disposition = res.headers.get("content-disposition") ?? "";
+  const match = /filename="([^"]+)"/.exec(disposition);
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = match?.[1] ?? fallbackName;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
